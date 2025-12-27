@@ -6,12 +6,14 @@ using Erkan_aktunc_web.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Veritabanı Bağlantısı
+// 1. VeritabanÃ½ BaÃ°lantÃ½sÃ½
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+   // options.UseSqlServer(connectionString));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseInMemoryDatabase("OdevGeciciDb"));
 
-// 2. Identity Ayarları
+// 2. Identity AyarlarÃ½
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = false;
@@ -44,14 +46,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication(); // Kimlik Doğrulama
+app.UseAuthentication(); // Kimlik DoÃ°rulama
 app.UseAuthorization();  // Yetkilendirme
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Veritabanı Seed İşlemleri
+// VeritabanÃ½ Seed ÃÃ¾lemleri
 using (var scope = app.Services.CreateScope())
 {
     await DbSeeder.SeedRolesAndAdminAsync(scope.ServiceProvider);
