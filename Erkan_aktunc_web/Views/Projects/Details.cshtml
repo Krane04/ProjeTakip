@@ -1,0 +1,171 @@
+﻿@model Erkan_aktunc_web.Models.Project
+
+<div class="container mt-4">
+    <div class="card shadow-sm mb-4 border-0">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h1 class="display-6 fw-bold">@Model.Title</h1>
+                    <p class="text-muted lead" style="font-size: 1rem;">@Model.Description</p>
+                </div>
+                <div class="text-end">
+                    <span class="badge bg-light text-dark border p-2 mb-2">
+                        📅 @Model.CreatedDate.ToShortDateString()
+                    </span>
+                    <br />
+                    <span class="badge bg-info text-dark p-2">
+                        Yönetici: @(Model.Manager?.FirstName) @(Model.Manager?.LastName)
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="mb-0">Ekip Üyeleri (@Model.Members.Count)</h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.Members.Any())
+                    {
+                        <ul class="list-group list-group-flush mb-3">
+                            @foreach (var member in Model.Members)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                    <span>
+                                        <i class="bi bi-person-circle text-secondary me-2"></i>
+                                        @member.FirstName @member.LastName
+                                    </span>
+                                    <span class="badge rounded-pill bg-light text-dark border">Üye</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="alert alert-light text-center small text-muted">
+                            Henüz ekip üyesi yok.
+                        </div>
+                    }
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    {
+                        <hr />
+                        <h6 class="small text-muted mb-2">Yeni Üye Ekle</h6>
+
+                        <form asp-action="AddMember" method="post">
+                            <input type="hidden" name="projectId" value="@Model.Id" />
+
+                            <div class="input-group">
+                                @if (ViewBag.PotentialMembers != null)
+                                {
+                                    <select name="userId" class="form-select form-select-sm" asp-items="ViewBag.PotentialMembers">
+                                        <option value="">-- Kullanıcı Seçiniz --</option>
+                                    </select>
+                                    <button class="btn btn-sm btn-success" type="submit">Ekle</button>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">Eklenecek yeni kullanıcı kalmadı.</span>
+                                }
+                            </div>
+                        </form>
+
+                        @if (TempData["Error"] != null)
+                        {
+                            <div class="alert alert-danger mt-2 py-1 small">@TempData["Error"]</div>
+                        }
+                        @if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success mt-2 py-1 small">@TempData["Success"]</div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Proje Görevleri</h6>
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                    {
+                        <a asp-controller="ProjectTask" asp-action="Create" asp-route-projectId="@Model.Id" class="btn btn-sm btn-success">
+                            <i class="bi bi-plus-lg"></i> Yeni Görev Ekle
+                        </a>
+                    }
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.Tasks.Any())
+                    {
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="ps-3">Başlık</th>
+                                    <th>Atanan</th>
+                                    <th>Durum</th>
+                                    <th class="text-end pe-3">İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var task in Model.Tasks)
+                                {
+                                    <tr>
+                                        <td class="ps-3 fw-bold">@task.Title</td>
+                                        <td>@(task.AssignedTo?.FirstName ?? "-")</td>
+                                        <td>
+                                            @if (task.Status.ToString() == "Tamamlandi")
+                                            {
+                                                <span class="badge bg-success">Tamamlandı</span>
+                                            }
+                                            else if (task.Status.ToString() == "Yapiliyor")
+                                            {
+                                                <span class="badge bg-warning text-dark">Yapılıyor</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">Beklemede</span>
+                                            }
+                                        </td>
+
+                                        <td class="text-end pe-3">
+                                            <a asp-controller="ProjectTask" asp-action="Edit" asp-route-id="@task.Id"
+                                               class="btn btn-sm btn-outline-primary" title="Düzenle / Durum Değiştir">
+                                                <i class="bi bi-pencil-square"></i> İşlem
+                                            </a>
+
+                                            @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                                            {
+                                                <a asp-controller="ProjectTask" asp-action="Delete" asp-route-id="@task.Id"
+                                                   class="btn btn-sm btn-outline-danger ms-1"
+                                                   onclick="return confirm('Bu görevi silmek istediğinize emin misiniz?');" title="Sil">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5 text-muted">
+                            <i class="bi bi-clipboard-check display-4"></i>
+                            <p class="mt-2">Bu projede henüz görev yok.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            &larr; Listeye Dön
+        </a>
+    </div>
+</div>

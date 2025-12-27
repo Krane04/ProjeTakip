@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="bg-dark text-secondary px-4 py-5 text-center text-white" style="border-radius: 0 0 50px 50px;">
+    <div class="py-5">
+        <h1 class="display-5 fw-bold text-white">Proje Yönetim Sistemi</h1>
+        <div class="col-lg-6 mx-auto">
+            <p class="fs-5 mb-4">Projelerinizi planlayın, görevleri atayın ve takımınızla eş zamanlı çalışın. İş akışınızı hızlandırmanın en kolay yolu.</p>
+
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <div class="card bg-white text-dark shadow-lg p-3 rounded-3 mt-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Hoşgeldin, @User.Identity.Name! 👋</h5>
+                            <p class="card-text small text-muted">Panelin seni bekliyor.</p>
+                            <a asp-controller="Projects" asp-action="Index" class="btn btn-primary btn-lg px-4 gap-3">
+                                <i class="bi bi-arrow-right-circle"></i> Projelerime Git
+                            </a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold">Hemen Kayıt Ol</a>
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-light btn-lg px-4">Giriş Yap</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container px-4 py-5" id="icon-grid">
+    <h2 class="pb-2 border-bottom">Neden Biz?</h2>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 py-5">
+        <div class="col d-flex align-items-start">
+            <i class="bi bi-shield-lock fs-2 text-primary me-3"></i>
+            <div>
+                <h4 class="fw-bold mb-0">Güvenli Altyapı</h4>
+                <p>Identity tabanlı rol ve yetkilendirme sistemi ile verileriniz güvende.</p>
+            </div>
+        </div>
+        <div class="col d-flex align-items-start">
+            <i class="bi bi-kanban fs-2 text-primary me-3"></i>
+            <div>
+                <h4 class="fw-bold mb-0">Görev Takibi</h4>
+                <p>Görevlerin durumunu (Beklemede, Yapılıyor, Tamamlandı) anlık takip edin.</p>
+            </div>
+        </div>
+        <div class="col d-flex align-items-start">
+            <i class="bi bi-people fs-2 text-primary me-3"></i>
+            <div>
+                <h4 class="fw-bold mb-0">Takım Çalışması</h4>
+                <p>Projelerinize üye ekleyin ve yönetici yetkileri verin.</p>
+            </div>
+        </div>
+    </div>
+</div>

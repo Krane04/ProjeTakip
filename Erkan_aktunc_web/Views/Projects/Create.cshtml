@@ -1,0 +1,31 @@
+﻿@model Erkan_aktunc_web.ViewModels.ProjectViewModel
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0">Yeni Proje Oluştur</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Proje Başlığı</label>
+                            <input asp-for="Title" class="form-control form-control-lg" placeholder="Örn: E-Ticaret Sitesi" required />
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Açıklama</label>
+                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Proje detayları..."></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Projeyi Oluştur</button>
+                            <a asp-action="Index" class="btn btn-light text-muted">İptal</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+﻿@model Erkan_aktunc_web.ViewModels.ProjectTaskViewModel
+
+<div class="container mt-5" style="max-width: 600px;">
+    <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Yeni Görev Oluştur</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create">
+                <input type="hidden" asp-for="ProjectId" />
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Görev Başlığı</label>
+                    <input asp-for="Title" class="form-control" required />
+                    <span asp-validation-for="Title" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Açıklama</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Kime Atanacak?</label>
+                    <select asp-for="AssignedToId" class="form-select" asp-items="ViewBag.Members">
+                        <option value="">-- Bir Üye Seçin --</option>
+                    </select>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-success">Görevi Ekle</button>
+                    <a asp-controller="Projects" asp-action="Details" asp-route-id="@Model.ProjectId" class="btn btn-light">İptal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
