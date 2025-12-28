@@ -37,7 +37,7 @@ Projeyi kendi bilgisayarınızda çalıştırmak için aşağıdaki adımları i
 3.  **Giriş Bilgileri:**
     Proje ilk çalıştığında veritabanına otomatik olarak bir Admin kullanıcısı eklenir:
     * **Email:** `admin@sakarya.edu.tr`
-    * **Şifre:** ``
+    * **Şifre:** `123`
 
 ## Kullanılan Teknolojiler
 
